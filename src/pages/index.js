@@ -1,16 +1,41 @@
 import * as React from "react"
-import { Link } from "gatsby"
+import { Link, StaticQuery, graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
+const query = graphql`
+  query {
+    allStrapiExhibitions {
+      edges {
+        node {
+          id
+          title
+          description
+        }
+      }
+    }
+  }
+`;
+
 const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
     <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
+    <StaticQuery
+      query = {query} 
+      render = {data => (
+        <ul>
+          {data.allStrapiExhibitions.edges.map(exhibitions => (
+            <div>
+              <li>{exhibitions.node.title} </li>
+              <li>{exhibitions.node.description}</li>
+            </div>
+          ))}
+        </ul>
+      )}
+    />
     <StaticImage
       src="../images/gatsby-astronaut.png"
       width={300}
